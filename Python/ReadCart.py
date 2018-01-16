@@ -92,6 +92,11 @@ lcd_init()
 
 while(checkedOut==False):
     try:
+        lcd_string("Summe",LCD_LINE_1)
+        lcd_string(shoppingListSum,LCD_LINE_2)
+    except KeyboardInterrupt:
+        pass
+
         id,itemName=reader.read()
         if(id==48700008907): #checkout if id matches checkout tag, white card atm
             checkedOut=True
@@ -103,11 +108,6 @@ while(checkedOut==False):
             shoppingListSumString = str(shoppingListSum) + ",-"
             #TODO : Push new price to display
 
-            try:
-                lcd_string("Summe",LCD_LINE_1)
-                lcd_string(shoppingListSum,LCD_LINE_2)
-            except KeyboardInterrupt:
-                pass
 
             for item in shoppingList:
                 print(item)
