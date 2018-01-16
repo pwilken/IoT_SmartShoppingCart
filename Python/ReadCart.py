@@ -105,7 +105,7 @@ while(checkedOut==False):
             shoppingList.append(itemName)
             #TODO : Pull price from database via itemname/GTIN
             shoppingListSum+=1
-            shoppingListSumString = str(shoppingListSum) + ",-"
+            shoppingListSumString = str(shoppingListSumString) + ",-"
             #TODO : Push new price to display
 
 
