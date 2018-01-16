@@ -78,21 +78,15 @@ def lcd_string(message,line):
     for i in range(LCD_WIDTH):
         lcd_byte(ord(message[i]),LCD_CHR)
 
-def write_to_display():
+def write_to_display(cartSumme):
     # Main program block
 
     # Output variables
-    summe = 3.99
-    sumStr = str(summe) + ",-"
+    sumStr = str(cartSumme) + ",-"
 
-    while True:
-        #Todoo update function
-
-        # Send some test
-        lcd_string("Summe",LCD_LINE_1)
-        lcd_string(sumStr,LCD_LINE_2)
-
-        time.sleep(5)
+    # Send some test
+    lcd_string("Summe",LCD_LINE_1)
+    lcd_string(sumStr,LCD_LINE_2)
 
 
 reader = SimpleMFRC522()
@@ -120,14 +114,12 @@ while(checkedOut==False):
             #TODO : Push new price to display
 
             try:
-                write_to_display()
+                write_to_display(shoppingListSum)
             except KeyboardInterrupt:
                 pass
             finally:
                 lcd_byte(0x01, LCD_CMD)
 
-
-            print(shoppingListSum)
             for item in shoppingList:
                 print(item)
             sleep(1)
