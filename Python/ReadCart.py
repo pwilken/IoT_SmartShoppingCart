@@ -100,7 +100,7 @@ while(checkedOut==False):
             shoppingList.append(itemName)
             #TODO : Pull price from database via itemname/GTIN
             shoppingListSum+=1
-
+            shoppingListSumString = str(shoppingListSum) + ",-"
             #TODO : Push new price to display
 
             try:
@@ -108,11 +108,10 @@ while(checkedOut==False):
                 lcd_string(shoppingListSum,LCD_LINE_2)
             except KeyboardInterrupt:
                 pass
-            finally:
-                lcd_byte(0x01, LCD_CMD)
 
             for item in shoppingList:
                 print(item)
             sleep(1)
     finally:
         GPIO.cleanup()
+        lcd_byte(0x01, LCD_CMD)
