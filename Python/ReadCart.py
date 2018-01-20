@@ -3,9 +3,10 @@
 import RPi.GPIO as GPIO
 from MFRC522.SimpleMFRC522 import *
 from time import sleep
-#from Item import *
+import item
 import smbus
 import time
+import ShoppingCart
 
 # Define some device parameters
 I2C_ADDR  = 0x3f # I2C device address, if any error, change this address to 0x27
@@ -78,41 +79,38 @@ def lcd_string(message,line):
     for i in range(LCD_WIDTH):
         lcd_byte(ord(message[i]),LCD_CHR)
 
+def main():
 
-reader = SimpleMFRC522()
+    reader = SimpleMFRC522()
 
-#TODO: gleiches Produkt entfernen falls nochmal gescannt (UID)
+    checkedOut=False
+    slist = ShoppingCart()
+    shoppingListSum=0
+    shoppingListSumString = str(shoppingListSum) + ",-"
 
-checkedOut=False
-shoppingList=[]
-shoppingListSum=0
+    # Initialise display
+    lcd_init()
 
-# Initialise display
-lcd_init()
+    while(checkedOut==False):
+        try:
+            lcd_string("Summe",LCD_LINE_1)
+            lcd_string(shoppingListSumString,LCD_LINE_2)
 
-while(checkedOut==False):
-    try:
-        lcd_string("Summe",LCD_LINE_1)
-        lcd_string(shoppingListSumString,LCD_LINE_2)
-
-        id,itemName=reader.read()
-        if(id==48700008907): #checkout if id matches checkout tag, white card atm
-            checkedOut=True
-        else:
-
-            shoppingList.append(itemName)
-            #TODO : Pull price from database via itemname/GTIN
-            shoppingListSum+=1
-            shoppingListSumString = str(shoppingListSum) + ",-"
-            #TODO : Push new price to display
+            id,itemName=reader.read()
+            if(id==48700008907): #checkout if id matches checkout tag, white card atm
+                checkedOut=True
+            else:
+                temp = Item(id, itemName)
+                slist.addItem(temp)
+                shoppingListSum = slist.getListSum()
+                shoppingListSumString = str(shoppingListSum) + ",-"
+                #TODO : Push new price to display
 
 
-            for item in shoppingList:
-                print(item)
-            sleep(1)
-    except KeyboardInterrupt:
-        pass
+                sleep(1)
+        except KeyboardInterrupt:
+            pass
 
-    finally:
-        GPIO.cleanup()
-        lcd_byte(0x01, LCD_CMD)
+        finally:
+            GPIO.cleanup()
+            lcd_byte(0x01, LCD_CMD)
