@@ -7,9 +7,9 @@ class ShoppingCart(object):
         self.listSum = 0
 
     def addItem(self, x):
-
-        if(self.checkIfAlreadyInCart(x)):
-            self.shoppinglist.remove(x)
+        self.ind = self.checkIfAlreadyInCart(x)
+        if(self.ind != -1):
+            self.shoppinglist.pop(self.ind)
             self.listSum -= x.price
         else:
             self.shoppinglist.append(x)
@@ -23,7 +23,10 @@ class ShoppingCart(object):
         return self.listSum
 
     def checkIfAlreadyInCart(self, x):
+        if(len(self.shoppinglist)==0):
+            return -1
         for i in self.shoppinglist:
             if (i.getUID() == x.getUID()):
-                return True
-            else: return False
+                return self.shoppinglist.index(i)
+            else:
+                return -1
