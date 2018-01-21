@@ -10,11 +10,13 @@ class ShoppingCart(object):
         self.ind = self.checkIfAlreadyInCart(x)
         if(self.ind != -1):
             self.shoppinglist.pop(self.ind)
-            self.listSum -= x.price
+            #self.listSum -= x.price
+            self.listSum -= 1
         else:
             self.shoppinglist.append(x)
             #TODO: DB Connection
-            self.listSum += x.price
+            #self.listSum += x.price
+	    self.listSum+=1
 
     def getList(self):
         return self.shoppinglist

@@ -100,12 +100,14 @@ def main():
             if(id==48700008907): #checkout if id matches checkout tag, white card atm
                 checkedOut=True
             else:
-                temp = Item.Item(id, itemName)
+                temp = Item.Item(itemName, id)
                 slist.addItem(temp)
                 shoppingListSum = slist.getListSum()
                 shoppingListSumString = str(shoppingListSum) + ",-"
                 #TODO : Push new price to display
-
+		sclist =  slist.getList()
+		for n in sclist:
+			print(n.getGTIN())
 
                 sleep(1)
         except KeyboardInterrupt:
