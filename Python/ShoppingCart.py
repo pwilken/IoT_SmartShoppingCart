@@ -16,7 +16,7 @@ class ShoppingCart(object):
             self.shoppinglist.append(x)
             #TODO: DB Connection
             #self.listSum += x.price
-	    self.listSum+=1
+            self.listSum+=1
 
     def getList(self):
         return self.shoppinglist
