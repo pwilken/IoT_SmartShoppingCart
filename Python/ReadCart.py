@@ -3,7 +3,7 @@
 import RPi.GPIO as GPIO
 from MFRC522.SimpleMFRC522 import *
 from time import sleep
-import item
+import Item
 import smbus
 import time
 import ShoppingCart
@@ -84,7 +84,7 @@ def main():
     reader = SimpleMFRC522()
 
     checkedOut=False
-    slist = ShoppingCart()
+    slist = ShoppingCart.ShoppingCart()
     shoppingListSum=0
     shoppingListSumString = str(shoppingListSum) + ",-"
 
@@ -100,7 +100,7 @@ def main():
             if(id==48700008907): #checkout if id matches checkout tag, white card atm
                 checkedOut=True
             else:
-                temp = Item(id, itemName)
+                temp = Item.Item(id, itemName)
                 slist.addItem(temp)
                 shoppingListSum = slist.getListSum()
                 shoppingListSumString = str(shoppingListSum) + ",-"
@@ -114,3 +114,6 @@ def main():
         finally:
             GPIO.cleanup()
             lcd_byte(0x01, LCD_CMD)
+
+if __name__ == "__main__":
+	main()

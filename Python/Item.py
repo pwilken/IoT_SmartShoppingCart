@@ -1,11 +1,6 @@
 class Item(object):
 
-    def __init__(self, gtin, uid):
-        self.gtin = gtin
-        self.uid = uid
-        self.price = 0
-
-    def __init__(self, gtin, uid,price):
+    def __init__(self, gtin, uid, price=0):
         self.gtin = gtin
         self.uid = uid
         self.price = price
