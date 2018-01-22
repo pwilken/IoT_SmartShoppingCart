@@ -9,7 +9,7 @@ import MyLCD
 
 def main():
 
-    lcd = MyLCD()
+    lcd = MyLCD.MyLCD()
     reader = SimpleMFRC522()
 
     checkedOut=False
