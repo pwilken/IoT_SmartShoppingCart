@@ -3,28 +3,42 @@
 import RPi.GPIO as GPIO
 from MFRC522.SimpleMFRC522 import *
 from time import sleep
+import Item
+import ShoppingCart
+import MyLCD
 
-reader = SimpleMFRC522()
+def main():
 
-#TODO: gleiches Produkt entfernen falls nochmal gescannt (UID)
+    lcd = MyLCD.MyLCD()
+    reader = SimpleMFRC522()
 
-checkedOut=False
-shoppingList=[]
-shoppingListSum=0
-while(checkedOut==False):
-    try:
-        id,itemName=reader.read()
-        if(id==48700008907): #checkout if id matches checkout tag, white card atm
-            checkedOut=True
-        else:
-            shoppingList.append(itemName)
-            #TODO : Pull price from database via itemname/GTIN
-            shoppingListSum+=1
+    checkedOut=False
+    slist = ShoppingCart.ShoppingCart()
+    shoppingListSum=0
+    shoppingListSumString = str(shoppingListSum) + ",-"
 
-            #TODO : Push new price to display
-            print(shoppingListSum)
-            for item in shoppingList:
-                print(item)
-            sleep(1)
-    finally:
-        GPIO.cleanup()
+    # Initialise display
+
+    while(checkedOut==False):
+        try:
+            lcd.lcd_print("Summe",1)
+            lcd.lcd_print(shoppingListSumString,2)
+
+            id,itemName=reader.read()
+            if(id==48700008907): #checkout if id matches checkout tag, white card atm
+                checkedOut=True
+            else:
+                temp = Item.Item(itemName, id)
+                slist.addItem(temp)
+                shoppingListSum = slist.getListSum()
+                shoppingListSumString = str(shoppingListSum) + ",-"
+                sleep(1)
+        except KeyboardInterrupt:
+            pass
+
+        finally:
+            GPIO.cleanup()
+            lcd.cleanup()
+
+if __name__ == "__main__":
+	main()
