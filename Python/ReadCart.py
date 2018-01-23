@@ -6,14 +6,16 @@ from time import sleep
 import Item
 import ShoppingCart
 import MyLCD
+import pymssql
 
 def main():
+    conn = pymssql.connect("127.0.0.1", "SA", "IoT20172018", "SmartCart")
 
     lcd = MyLCD.MyLCD()
     reader = SimpleMFRC522()
 
     checkedOut=False
-    slist = ShoppingCart.ShoppingCart()
+    slist = ShoppingCart.ShoppingCart(conn)
     shoppingListSum=0
     shoppingListSumString = str(shoppingListSum) + ",-"
 

@@ -1,22 +1,24 @@
 import Item
+import pymssql
 
 class ShoppingCart(object):
 
-    def __init__(self):
+    def __init__(self, connection):
         self.shoppinglist = list()
         self.listSum = 0
+        self.connection = connection
 
     def addItem(self, x):
         self.ind = self.checkIfAlreadyInCart(x)
         if(self.ind != -1):
             self.shoppinglist.pop(self.ind)
-            #self.listSum -= x.price
-            self.listSum -= 1
+            self.listSum -= x.price
+            self.decrementItemCount(x.getGTIN())
         else:
             self.shoppinglist.append(x)
-            #TODO: DB Connection
-            #self.listSum += x.price
-            self.listSum+=1
+            x.price = self.getPrice(x.getGTIN())
+            self.listSum += x.price
+            self.incrementItemCount(x.getGTIN())
 
     def getList(self):
         return self.shoppinglist
@@ -32,3 +34,16 @@ class ShoppingCart(object):
                 return self.shoppinglist.index(i)
             else:
                 return -1
+
+    def getPrice(self, id):
+        cursor = self.connection.cursor()
+        cursor.execute('SELECT Price FROM Inventory WHERE ProductId = ' + id)
+        return float(cursor.next())
+
+    def incrementItemCount(self, id):
+        cursor = self.connection.cursor()
+        cursor.execute('UPDATE Inventory SET Count = Count+1 WHERE ProductId = ' + id)
+
+    def decrementItemCount(self, id):
+        cursor = self.connection.cursor()
+        cursor.execute('UPDATE Inventory SET Count = Count-1 WHERE ProductId = ' + id)
