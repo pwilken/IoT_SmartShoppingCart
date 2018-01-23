@@ -9,7 +9,7 @@ import MyLCD
 import pymssql
 
 def main():
-    conn = pymssql.connect("127.0.0.1", "SA", "IoT20172018", "SmartCart")
+    conn = pymssql.connect("192.168.43.9", "SA", "IoT20172018", "SmartCart")
 
     lcd = MyLCD.MyLCD()
     reader = SimpleMFRC522()
@@ -41,6 +41,7 @@ def main():
         finally:
             GPIO.cleanup()
             lcd.cleanup()
+    conn.close()
 
 if __name__ == "__main__":
 	main()
