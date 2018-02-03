@@ -7,13 +7,24 @@ import Item
 import ShoppingCart
 import MyLCD
 import pymssql
+import signal
+
+continue_reading = True
+
+def end_read(signal,frame):
+    global continue_reading
+    print("Ctrl+C captured, ending read.")
+    continue_reading = False
+    GPIO.cleanup()
 
 def main():
     conn = pymssql.connect("192.168.43.9", "SA", "IoT20172018", "SmartCart")
 
+    signal.signal(signal.SIGINT, end_read)
+
     lcd = MyLCD.MyLCD()
     reader = SimpleMFRC522()
-    while(True):
+    while(continue_reading):
         checkedOut=False
         slist = ShoppingCart.ShoppingCart(conn)
         shoppingListSum=0
@@ -40,7 +51,7 @@ def main():
                 GPIO.cleanup()
                 lcd.cleanup()
         try:
-            lcd.lcd_print("Vielen Dank für",1)
+            lcd.lcd_print("Vielen Dank fuer",1)
             lcd.lcd_print("Ihren Einkauf!",2)
         finally:
             lcd.cleanup
