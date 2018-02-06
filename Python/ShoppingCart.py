@@ -13,7 +13,7 @@ class ShoppingCart(object):
         self.ind = self.checkIfAlreadyInCart(x)
         if(self.ind != -1):
             self.shoppinglist.pop(self.ind)
-            self.listSum -= self.getPrice(x)
+            self.listSum -= self.getPrice(x.getGTIN())
             self.incrementItemCount(x.getGTIN())
         else:
             self.shoppinglist.append(x)
